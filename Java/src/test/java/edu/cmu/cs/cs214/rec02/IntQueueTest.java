@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  */
 public class IntQueueTest {
 
-    private IntQueue mQueue;
+    private ArrayIntQueue mQueue;
     private List<Integer> testList;
 
     /**
@@ -33,8 +33,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-//        mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+        mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
@@ -73,10 +73,43 @@ public class IntQueueTest {
 
     @Test
     public void testDequeue() {
+        assertEquals(mQueue.dequeue(),null);
         testList.forEach(n -> mQueue.enqueue(n));
         for (int i = 0; i < testList.size(); i++) {
             assertEquals(testList.get(i), mQueue.dequeue());
             assertEquals(testList.size() - i - 1, mQueue.size());
+        }
+    }
+
+    @Test
+    public void testClear() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        mQueue.clear();
+        assertEquals(mQueue.size(),0);
+    }
+
+    @Test
+    public void testEnsureCapacity1() {
+        for (int i = 1; i < 1000; i++) {
+            mQueue.enqueue(testList.get(1));
+            assertEquals(i,mQueue.size());
+        }
+    }
+
+    @Test
+    public void testEnsureCapacity2() {
+        for (int i = 1; i <= 1000; i++) {
+            mQueue.enqueue(testList.get(1));
+            assertEquals(i,mQueue.size());
+        }
+        for (int i=1;i<=10;i++){
+            mQueue.dequeue();
+        }
+        for (int i=1;i<=500;i++){
+            mQueue.enqueue(testList.get(1));
+            assertEquals(i+990,mQueue.size());
         }
     }
 
